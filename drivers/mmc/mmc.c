@@ -2057,6 +2057,10 @@ static int mmc_startup(struct mmc *mmc)
 	uint mult, freq;
 	u64 cmult, csize;
 	struct mmc_cmd cmd;
+	ALLOC_CACHE_ALIGN_BUFFER(u8, ext_csd, MMC_MAX_BLOCK_LEN);
+	ALLOC_CACHE_ALIGN_BUFFER(u8, test_csd, MMC_MAX_BLOCK_LEN);
+	bool has_parts = false;
+	bool part_completed;
 	struct blk_desc *bdesc;
 	int retries = 3;
 
