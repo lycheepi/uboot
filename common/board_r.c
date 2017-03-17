@@ -431,6 +431,7 @@ static int initr_nand(void)
 {
 	puts("NAND:  ");
 	nand_init();
+	printf("%lu MiB\n", nand_size() / 1024);
 	return 0;
 }
 #endif
