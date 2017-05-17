@@ -96,11 +96,11 @@ libs-y += arch/arm/lib/
 
 ifeq ($(CONFIG_SPL_BUILD),y)
 ifneq (,$(CONFIG_MX23)$(CONFIG_MX28)$(CONFIG_MX35)$(filter $(SOC), mx25 mx5 mx6 mx7 mx35 imx8m))
-libs-y += arch/arm/mach-imx/
+libs-y += arch/arm/mach-common/
 endif
 else
-ifneq (,$(filter $(SOC), mx25 mx27 mx5 mx6 mx7 mx7ulp mx31 mx35 mxs imx8m vf610))
-libs-y += arch/arm/mach-imx/
+ifneq (,$(filter $(SOC), mx25 mx27 mx5 mx6 mx7 mx7ulp mx31 mx35 mxs vf610 imx8))
+libs-y += arch/arm/imx-common/
 endif
 endif
 
