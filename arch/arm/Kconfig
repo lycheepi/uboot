@@ -792,6 +792,12 @@ config ARCH_ZYNQMP
 	select DM_USB if USB
 	imply FAT_WRITE
 
+config ARCH_IMX8
+	bool "Support NXP i.MX8 platform"
+	select ARM64
+	select DM
+	select OF_CONTROL
+
 config TEGRA
 	bool "NVIDIA Tegra"
 	imply FAT_WRITE
@@ -1271,6 +1277,8 @@ source "arch/arm/cpu/armv7/vf610/Kconfig"
 source "arch/arm/mach-zynq/Kconfig"
 
 source "arch/arm/cpu/armv7/Kconfig"
+
+source "arch/arm/cpu/armv8/imx8/Kconfig"
 
 source "arch/arm/cpu/armv8/zynqmp/Kconfig"
 
