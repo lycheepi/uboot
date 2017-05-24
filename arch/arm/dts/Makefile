@@ -424,7 +424,8 @@ dtb-$(CONFIG_RCAR_GEN3) += \
 	r8a77970-eagle.dtb \
 	r8a77995-draak.dtb
 
-dtb-$(CONFIG_ARCH_IMX8) += fsl-imx8qm-lpddr4-arm2.dtb
+dtb-$(CONFIG_ARCH_IMX8) += fsl-imx8qm-lpddr4-arm2.dtb \
+		fsl-imx8qxp-lpddr4-arm2.dtb
 
 dtb-$(CONFIG_SOC_KEYSTONE) += keystone-k2hk-evm.dtb \
 	keystone-k2l-evm.dtb \
