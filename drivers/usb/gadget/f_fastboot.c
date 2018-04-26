@@ -57,6 +57,7 @@ extern void trusty_os_init(void);
 #endif
 
 #ifdef CONFIG_AVB_SUPPORT
+#include <dt_table.h>
 #include <fsl_avb.h>
 #endif
 
