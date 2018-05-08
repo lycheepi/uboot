@@ -645,6 +645,7 @@ bool is_usb_boot(void)
 	return get_boot_device() == USB_BOOT;
 }
 
+#if defined(CONFIG_ARCH_MISC_INIT)
 #define FSL_SIP_BUILDINFO		0xC2000003
 #define FSL_SIP_BUILDINFO_GET_COMMITHASH	0x00
 extern uint32_t _end_ofs;
@@ -700,7 +701,6 @@ static void acquire_buildinfo(void)
 	printf("\n BuildInfo: \n  - SCFW %08x, IMX-MKIMAGE %s, ATF %s\n  - %s \n\n", sc_commit, mkimage_commit, (char *)&atf_commit, U_BOOT_VERSION);
 }
 
-#if defined(CONFIG_ARCH_MISC_INIT)
 int arch_misc_init(void)
 {
 	acquire_buildinfo();
