@@ -1186,7 +1186,7 @@ static void update_fdt_with_owned_resources(void *blob)
 	  */
 
 	int offset = 0, next_off;
-	int depth, next_depth;
+	int depth = 0, next_depth;
 	unsigned int rsrc_id;
 	int rc;
 
