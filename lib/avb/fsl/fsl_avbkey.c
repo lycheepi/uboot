@@ -81,12 +81,14 @@ int read_keyslot_package(struct keyslot_package* kp) {
 	dev_desc = blk_get_dev("mmc", mmcc);
 #else
 	dev_desc = mmc_get_blk_desc(mmc);
-	original_part = dev_desc->hwpart;
 #endif
 	if (NULL == dev_desc) {
 		printf("** Block device MMC %d not supported\n", mmcc);
 		return -1;
 	}
+#ifdef CONFIG_BLK
+	original_part = dev_desc->hwpart;
+#endif
 
 	blksz = dev_desc->blksz;
 	fill = (unsigned char *)memalign(ALIGN_BYTES, blksz);
@@ -98,7 +100,10 @@ int read_keyslot_package(struct keyslot_package* kp) {
 		goto fail;;
 	}
 
-	mmc_switch_part(mmc, KEYSLOT_HWPARTITION_ID);
+	if (mmc_switch_part(mmc, KEYSLOT_HWPARTITION_ID) != 0) {
+		ret = -1;
+		goto fail;
+	}
 #ifndef CONFIG_BLK
 	mmc->block_dev.hwpart = KEYSLOT_HWPARTITION_ID;
 #else
@@ -273,8 +278,9 @@ fail:
 	/* Return to original partition */
 	if (desc->hwpart != original_part) {
 		if (mmc_switch_part(mmc, original_part) != 0)
-			return -1;
-		desc->hwpart = original_part;
+			ret = -1;
+		else
+			desc->hwpart = original_part;
 	}
 	if (blob != NULL)
 		free(blob);
@@ -377,8 +383,9 @@ fail:
 	/* Return to original partition */
 	if (desc->hwpart != original_part) {
 		if (mmc_switch_part(mmc, original_part) != 0)
-			return -1;
-		desc->hwpart = original_part;
+			ret = -1;
+		else
+			desc->hwpart = original_part;
 	}
 	if (blob != NULL)
 		free(blob);
@@ -573,7 +580,11 @@ int gen_rpmb_key(struct keyslot_package *kp) {
 	}
 	memcpy(fill, kp, sizeof(struct keyslot_package));
 
-	mmc_switch_part(mmc, KEYSLOT_HWPARTITION_ID);
+	if (mmc_switch_part(mmc, KEYSLOT_HWPARTITION_ID) != 0) {
+		ret = -1;
+		goto fail;
+	}
+
 	if (blk_dwrite(dev_desc, KEYSLOT_BLKS,
 		    1, (void *)fill) != 1) {
 		printf("Failed to write rpmbkeyblob.");
@@ -583,15 +594,19 @@ int gen_rpmb_key(struct keyslot_package *kp) {
 	/* program key to mmc */
 #ifndef CONFIG_BLK
 	if (mmc->block_dev.hwpart != MMC_PART_RPMB) {
-		if (mmc_switch_part(mmc, MMC_PART_RPMB) != 0)
-			return -1;
-		mmc->block_dev.hwpart = MMC_PART_RPMB;
+		if (mmc_switch_part(mmc, MMC_PART_RPMB) != 0) {
+			ret = -1;
+			goto fail;
+		} else
+			mmc->block_dev.hwpart = MMC_PART_RPMB;
 	}
 #else
 	if (dev_desc->hwpart != MMC_PART_RPMB) {
-		if (mmc_switch_part(mmc, MMC_PART_RPMB) != 0)
-			return -1;
-		dev_desc->hwpart = MMC_PART_RPMB;
+		if (mmc_switch_part(mmc, MMC_PART_RPMB) != 0) {
+			ret = -1;
+			goto fail;
+		} else
+			dev_desc->hwpart = MMC_PART_RPMB;
 	}
 #endif
 	if (mmc_rpmb_set_key(mmc, plain_key)) {
@@ -602,23 +617,25 @@ int gen_rpmb_key(struct keyslot_package *kp) {
 	ret = 0;
 
 fail:
-	if (fill != NULL)
-		free(fill);
-
 	/* Return to original partition */
 #ifndef CONFIG_BLK
 	if (mmc->block_dev.hwpart != original_part) {
 		if (mmc_switch_part(mmc, original_part) != 0)
-			return -1;
-		mmc->block_dev.hwpart = original_part;
+			ret = -1;
+		else
+			mmc->block_dev.hwpart = original_part;
 	}
 #else
 	if (dev_desc->hwpart != original_part) {
 		if (mmc_switch_part(mmc, original_part) != 0)
-			return -1;
-		dev_desc->hwpart = original_part;
+			ret = -1;
+		else
+			dev_desc->hwpart = original_part;
 	}
 #endif
+	if (fill != NULL)
+		free(fill);
+
 	return ret;
 
 }
