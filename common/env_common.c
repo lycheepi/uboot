@@ -15,7 +15,7 @@
 #include <search.h>
 #include <errno.h>
 #include <malloc.h>
-
+#include <asm/imx-common/boot_mode.h>
 DECLARE_GLOBAL_DATA_PTR;
 
 /************************************************************************
@@ -38,7 +38,29 @@ static uchar env_get_char_init(int index)
 	if (gd->env_valid)
 		return env_get_char_spec(index);
 	else
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+	/*IWG27M:ANDROID_UBOOT: Selecting default environment variables for particular boot device*/
+	switch (get_boot_device())	{
+		case SATA_BOOT:
+				return default_environment_sata[index];
+				break;
+		case MMC1_BOOT:
+				return default_environment_emmc[index];
+				break;
+		case SD2_BOOT :
+                                return default_environment_ssd[index];
+                                break; 
+		case SD3_BOOT :	
+				return default_environment_msd[index];
+				break;	
+				
+		default:
+				return default_environment[index];
+				break;
+		}
+#else
 		return default_environment[index];
+#endif
 }
 
 uchar env_get_char_memory(int index)
@@ -60,7 +82,28 @@ const uchar *env_get_addr(int index)
 	if (gd->env_valid)
 		return (uchar *)(gd->env_addr + index);
 	else
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+	/*IWG27M:ANDROID_UBOOT: returns particular boot device */
+	switch(get_boot_device())	{
+		case SATA_BOOT:
+				return &default_environment_sata[index];
+				break;
+		case MMC1_BOOT:
+				return &default_environment_emmc[index];
+				break;
+		case SD2_BOOT:
+				return &default_environment_ssd[index];
+				break;
+		case SD3_BOOT :
+                                return &default_environment_msd[index];
+                                break;
+                default:
+                                return &default_environment[index];
+                                break;
+		}
+#else	
 		return &default_environment[index];
+#endif
 }
 
 /*
@@ -98,11 +141,46 @@ char *getenv_default(const char *name)
 void set_default_env(const char *s)
 {
 	int flags = 0;
-
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+	/* IWG27M:ANDROID_UBOOT:Set default environment variables */
+	switch(get_boot_device()) 	{
+	case SATA_BOOT:
+			if(sizeof(default_environment_sata)>ENV_SIZE) {
+				puts("***Error-default_environment_is_too_large\n\n");
+				return;
+			}
+			break;
+	case MMC1_BOOT:
+			if(sizeof(default_environment_emmc)>ENV_SIZE) {
+				puts("***Error-default_environment_is_too_large\n\n");
+				return;
+			}
+			break;
+	case SD2_BOOT:
+			if(sizeof(default_environment_ssd)>ENV_SIZE) {
+				puts("***Error-default_enviroment_is_too_large\n\n");
+				return;
+			}
+			break;
+	case SD3_BOOT:
+			if(sizeof(default_environment_msd)>ENV_SIZE) {
+				puts("***Error-default_environment_is_too_large\n\n");				
+				return;
+			}
+			break;
+	default:
+                       if(sizeof(default_environment)>ENV_SIZE){
+                                puts("*** Error - default environment is too large\n\n");
+                        return;
+                        }
+                        break;
+                }
+#else
 	if (sizeof(default_environment) > ENV_SIZE) {
 		puts("*** Error - default environment is too large\n\n");
 		return;
 	}
+#endif
 
 	if (s) {
 		if (*s == '!') {
@@ -117,6 +195,57 @@ void set_default_env(const char *s)
 		puts("Using default environment\n\n");
 	}
 
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+		/* IWG27M:ANDROID_UBOOT:Importing environment variables */
+        switch(get_boot_device())       {
+        case SATA_BOOT:
+			if(himport_r(&env_htab, (char *)default_environment,
+                        sizeof(default_environment), '\0', flags, 0,
+                        0, NULL) == 0)
+			
+			error("Environment import failed: error no=%d\n",errno);
+			gd->flags |= GD_FLG_ENV_READY;
+       			gd->flags |= GD_FLG_ENV_DEFAULT;
+			break;
+	case MMC1_BOOT:
+                       if (himport_r(&env_htab, (char *)default_environment_emmc,
+                                sizeof(default_environment_emmc), '\0', flags, 0,
+                                0, NULL) == 0)
+                        error("Environment import failed: errno = %d\n", errno); 
+
+                        gd->flags |= GD_FLG_ENV_READY;
+                        gd->flags |= GD_FLG_ENV_DEFAULT;
+                        break;
+        case SD2_BOOT :
+                       if (himport_r(&env_htab, (char *)default_environment_ssd,
+                                sizeof(default_environment_ssd), '\0', flags, 0,
+                                0, NULL) == 0)
+                        error("Environment import failed: errno = %d\n", errno); 
+
+                        gd->flags |= GD_FLG_ENV_READY;
+                        gd->flags |= GD_FLG_ENV_DEFAULT;
+                        break;
+        case SD3_BOOT :
+                       if (himport_r(&env_htab, (char *)default_environment_msd,
+                                sizeof(default_environment_msd), '\0', flags, 0,
+                                 0, NULL) == 0)
+                        error("Environment import failed: errno = %d\n", errno); 
+
+                        gd->flags |= GD_FLG_ENV_READY;
+                        gd->flags |= GD_FLG_ENV_DEFAULT;
+                        break;
+		
+	default:
+                       if (himport_r(&env_htab, (char *)default_environment,
+                                sizeof(default_environment), '\0', flags, 0,
+                                0, NULL) == 0)
+                        error("Environment import failed: errno = %d\n", errno); 
+
+                        gd->flags |= GD_FLG_ENV_READY;
+                        gd->flags |= GD_FLG_ENV_DEFAULT;
+                        break;
+                }
+#else
 	if (himport_r(&env_htab, (char *)default_environment,
 			sizeof(default_environment), '\0', flags, 0,
 			0, NULL) == 0)
@@ -124,6 +253,7 @@ void set_default_env(const char *s)
 
 	gd->flags |= GD_FLG_ENV_READY;
 	gd->flags |= GD_FLG_ENV_DEFAULT;
+#endif
 }
 
 
@@ -134,9 +264,41 @@ int set_default_vars(int nvars, char * const vars[])
 	 * Special use-case: import from default environment
 	 * (and use \0 as a separator)
 	 */
+
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+		/* IWG27M:IMX8QM: Set the values for environment variables */
+        switch (get_boot_device()) {
+                case SATA_BOOT:
+                	        return himport_r(&env_htab, (const char *)default_environment_sata,
+                                sizeof(default_environment_sata), '\0',
+                              	H_NOCLEAR | H_INTERACTIVE, 0, nvars, vars);
+                                break;
+                case MMC1_BOOT:
+                      		return himport_r(&env_htab, (const char *)default_environment_emmc,
+                                sizeof(default_environment_emmc), '\0',
+                                H_NOCLEAR | H_INTERACTIVE, 0, nvars, vars);
+                                break;
+                case SD2_BOOT :
+                  		return himport_r(&env_htab, (const char *)default_environment_ssd,
+                                sizeof(default_environment_ssd), '\0',
+                               	H_NOCLEAR | H_INTERACTIVE, 0, nvars, vars);
+                                break;
+                case SD3_BOOT :
+                      		return himport_r(&env_htab, (const char *)default_environment_msd,
+                               	sizeof(default_environment_msd), '\0',
+                                H_NOCLEAR | H_INTERACTIVE, 0, nvars, vars);
+                                break;
+                default	:
+                      		return himport_r(&env_htab, (const char *)default_environment,
+                                sizeof(default_environment), '\0',
+                              	H_NOCLEAR | H_INTERACTIVE, 0, nvars, vars);
+                                break;
+                }
+#else
 	return himport_r(&env_htab, (const char *)default_environment,
 				sizeof(default_environment), '\0',
 				H_NOCLEAR | H_INTERACTIVE, 0, nvars, vars);
+#endif
 }
 
 #ifdef CONFIG_ENV_AES

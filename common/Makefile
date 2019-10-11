@@ -44,6 +44,7 @@ obj-$(CONFIG_ENV_IS_IN_MMC) += env_mmc.o
 obj-$(CONFIG_ENV_IS_IN_FAT) += env_fat.o
 obj-$(CONFIG_ENV_IS_IN_EXT4) += env_ext4.o
 obj-$(CONFIG_ENV_IS_IN_NAND) += env_nand.o
+obj-$(CONFIG_ENV_IS_IN_DYNAMIC) += env_iwg27m.o
 obj-$(CONFIG_ENV_IS_IN_NVRAM) += env_nvram.o
 obj-$(CONFIG_ENV_IS_IN_ONENAND) += env_onenand.o
 obj-$(CONFIG_ENV_IS_IN_SATA) += env_sata.o

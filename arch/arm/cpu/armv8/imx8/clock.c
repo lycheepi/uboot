@@ -51,8 +51,14 @@ unsigned int mxc_get_clock(enum mxc_clock clk)
 
 	switch (clk) {
 	case MXC_UART_CLK:
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+		/* IWG27M:ANDROID_UBOOT: Enable clock resource for Debug uart_4 */
+		err = sc_pm_get_clock_rate((sc_ipc_t)gd->arch.ipc_channel_handle,
+				SC_R_UART_4, 2, &clkrate);
+#else
 		err = sc_pm_get_clock_rate((sc_ipc_t)gd->arch.ipc_channel_handle,
 				SC_R_UART_0, 2, &clkrate);
+#endif
 		if (err != SC_ERR_NONE) {
 			printf("sc get UART clk failed! err=%d\n", err);
 			return 0;

@@ -461,9 +461,10 @@ void pci_init(void)
 	/* allow env to disable pci init/enum */
 	if (getenv("pcidisable") != NULL)
 		return;
-
+#ifndef CONFIG_TARGET_IMX8QM_IWG27M 
 	/* now call board specific pci_init()... */
 	pci_init_board();
+#endif
 }
 
 /* Returns the address of the requested capability structure within the

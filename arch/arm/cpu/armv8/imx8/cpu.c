@@ -1349,3 +1349,35 @@ void power_off_pd_devices(const char* permanent_on_devices[], int size)
 		}
 	}
 }
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+/* IWG27M:ANDROID_UBOOT: Assigning device numbers for emmc,sd,msd */
+
+#ifdef CONFIG_DYNAMIC_MMC_DEVNO
+int mmc_get_env_dev(void)
+{
+        sc_ipc_t ipcHndl = 0;
+        sc_rsrc_t dev_rsrc;
+        int devno;
+
+        ipcHndl = gd->arch.ipc_channel_handle;
+        sc_misc_get_boot_dev(ipcHndl, &dev_rsrc);
+
+        switch(dev_rsrc) {
+        case SC_R_SDHC_0:
+                devno = 0;
+                break;
+        case SC_R_SDHC_1:
+                devno = 1;
+                break;
+        case SC_R_SDHC_2:
+                devno = 2;
+                break;
+        default:                
+                /* If not boot from sd/mmc, use default value */
+               return CONFIG_SYS_MMC_ENV_DEV;
+
+        }
+	return devno;
+}
+#endif
+#endif

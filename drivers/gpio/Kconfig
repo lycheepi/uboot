@@ -228,4 +228,11 @@ config MPC85XX_GPIO
 
 	  The driver has been tested on MPC85XX, but it is likely that other
 	  PowerQUICC III devices will work as well.
+
+config IMX8_UNUSED_GPIO
+       bool "iWave unused GPIO"
+       depends on DM && TARGET_IMX8QM_IWG27M 
+       default n
+       help
+       Say yes here to set the unused GPIOs as input in iWG27M platform.
 endmenu

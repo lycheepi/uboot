@@ -1249,12 +1249,24 @@ static int fec_phy_init(struct fec_priv *priv, struct udevice *dev)
 {
 	struct phy_device *phydev;
 	int mask = 0xffffffff;
+	int addr;	
 
 #ifdef CONFIG_PHYLIB
 	mask = 1 << CONFIG_FEC_MXC_PHYADDR;
 #endif
 
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+       /* IWG27M: Ethernet Auto phy detection setting */
+       for (addr = 0; addr < PHY_MAX_ADDR; addr++){
+               phydev = phy_find_by_mask(priv->bus, 1 << addr, priv->interface);
+               if (phydev == NULL)
+                       continue;
+               else
+                       break;
+       }
+#else
 	phydev = phy_find_by_mask(priv->bus, mask, priv->interface);
+#endif
 	if (!phydev)
 		return -ENODEV;
 

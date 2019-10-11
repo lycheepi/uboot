@@ -59,8 +59,10 @@ int board_video_skip(void)
 			printf("LCD %s cannot be configured: %d\n",
 			       displays[i].mode.name, ret);
 	} else {
+#ifndef CONFIG_TARGET_IMX8QM_IWG27M
 		if (strcmp(panel, "NULL"))
 			printf("unsupported panel %s\n", panel);
+#endif
 		return -EINVAL;
 	}
 

@@ -1613,13 +1613,14 @@ static int sd_select_mode_and_width(struct mmc *mmc, uint card_caps)
 						goto error;
 					}
 				}
-
+/* IWG27M:ANDROID_UBOOT: Fix for bad_ssr issue */
+#if CONFIG_IS_ENABLED(MMC_WRITE)
 				err = sd_read_ssr(mmc);
+				if(err)
+					pr_warn("bad ssr\n");		
+#endif		
 				if (!err)
 					return 0;
-				else
-					printf("bad ssr\n");
-
 error:
 				/* revert to a safer bus speed */
 				mmc_select_mode(mmc, SD_LEGACY);
