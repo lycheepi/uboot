@@ -29,11 +29,11 @@
 
 #ifdef CONFIG_SCSI_AHCI_PLAT
 #ifdef CONFIG_FSL_HSIO
-#define HW_PP2C		0xAC
-#define HW_PP3C		0xB0
-#define HW_PP4C		0xB4
-#define HW_PP5C		0xB8
-#define HW_PAXIC	0xC0
+#define HW_PP2C		0x0C
+#define HW_PP3C		0x10
+#define HW_PP4C		0x14
+#define HW_PP5C		0x18
+#define HW_PAXIC	0x20
 #endif
 #endif
 

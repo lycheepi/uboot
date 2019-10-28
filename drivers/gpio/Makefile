@@ -50,6 +50,7 @@ obj-$(CONFIG_SUNXI_GPIO)	+= sunxi_gpio.o
 obj-$(CONFIG_LPC32XX_GPIO)	+= lpc32xx_gpio.o
 obj-$(CONFIG_STM32F7_GPIO)	+= stm32f7_gpio.o
 obj-$(CONFIG_GPIO_UNIPHIER)	+= gpio-uniphier.o
+obj-$(CONFIG_GPIO_SMARC_UNUSED) += gpio-unused.o
 obj-$(CONFIG_ZYNQ_GPIO)		+= zynq_gpio.o
 obj-$(CONFIG_VYBRID_GPIO)	+= vybrid_gpio.o
 obj-$(CONFIG_HIKEY_GPIO)	+= hi6220_gpio.o

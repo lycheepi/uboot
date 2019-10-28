@@ -192,6 +192,9 @@ int boot_relocate_fdt(struct lmb *lmb, char **of_flat_tree, ulong *of_size)
 	*of_size = of_len;
 
 	set_working_fdt_addr((ulong)*of_flat_tree);
+#ifdef CONFIG_TARGET_IMX8QM_IWG27M
+	iwg27m_fdt_update(*of_flat_tree);
+#endif
 	return 0;
 
 error:

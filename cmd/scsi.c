@@ -13,7 +13,7 @@
 #include <scsi.h>
 
 static int scsi_curr_dev; /* current device */
-
+int scsi_curr_dev; /* current device */
 /*
  * scsi boot command intepreter. Derived from diskboot
  */

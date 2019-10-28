@@ -87,6 +87,13 @@ config HSDK_CREG_GPIO
 	help
 	  This driver supports CREG GPIOs on Synopsys HSDK SOC.
 
+config GPIO_SMARC_UNUSED
+	bool "iWave unused GPIO"
+	depends on DM && TARGET_IMX8QM_IWG27M 
+	default n
+	help
+	  Say yes here to set the unused GPIOs as input in iW-RainboW-G27M platform.
+
 config LPC32XX_GPIO
 	bool "LPC32XX GPIO driver"
 	depends on DM

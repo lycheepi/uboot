@@ -48,6 +48,7 @@ obj-$(CONFIG_ENV_IS_IN_MMC) += mmc.o
 obj-$(CONFIG_ENV_IS_IN_FAT) += fat.o
 obj-$(CONFIG_ENV_IS_IN_EXT4) += ext4.o
 obj-$(CONFIG_ENV_IS_IN_NAND) += nand.o
+obj-$(CONFIG_ENV_IS_IN_DYNAMIC) += iwg27m.o
 obj-$(CONFIG_ENV_IS_IN_SPI_FLASH) += sf.o
 obj-$(CONFIG_ENV_IS_IN_FLASH) += flash.o
 endif
