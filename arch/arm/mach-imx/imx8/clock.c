@@ -52,7 +52,7 @@ unsigned int mxc_get_clock(enum mxc_clock clk)
 	switch (clk) {
 	case MXC_UART_CLK:
 		err = sc_pm_get_clock_rate((sc_ipc_t)gd->arch.ipc_channel_handle,
-				SC_R_UART_0, 2, &clkrate);
+				SC_R_UART_4, 2, &clkrate);
 		if (err != SC_ERR_NONE) {
 			printf("sc get UART clk failed! err=%d\n", err);
 			return 0;
@@ -60,7 +60,7 @@ unsigned int mxc_get_clock(enum mxc_clock clk)
 		return clkrate;
 	case MXC_ESDHC_CLK:
 		err = sc_pm_get_clock_rate((sc_ipc_t)gd->arch.ipc_channel_handle,
-				SC_R_SDHC_4, 2, &clkrate);
+				SC_R_SDHC_0, 2, &clkrate);
 		if (err != SC_ERR_NONE) {
 			printf("sc get uSDHC1 clk failed! err=%d\n", err);
 			return 0;

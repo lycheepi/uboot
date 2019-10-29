@@ -1241,6 +1241,7 @@ static int fec_phy_init(struct fec_priv *priv, struct udevice *dev)
 {
 	struct phy_device *phydev;
 	int mask = 0xffffffff;
+	int addr;
 
 #ifdef CONFIG_PHYLIB
 	mask = 1 << CONFIG_FEC_MXC_PHYADDR;

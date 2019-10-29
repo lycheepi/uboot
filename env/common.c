@@ -124,7 +124,7 @@ void set_default_env(const char *s)
 			if (himport_r(&env_htab, (char *)default_environment_sata,
 	                        sizeof(default_environment_sata), '\0', flags, 0,
         	                0, NULL) == 0)
-                	error("Environment import failed: errno = %d\n", errno);
+                	pr_err("Environment import failed: errno = %d\n", errno);
 
 		        gd->flags |= GD_FLG_ENV_READY;
        			gd->flags |= GD_FLG_ENV_DEFAULT;
@@ -134,7 +134,7 @@ void set_default_env(const char *s)
 			if (himport_r(&env_htab, (char *)default_environment_emmc,
                                 sizeof(default_environment_emmc), '\0', flags, 0,
                                 0, NULL) == 0)
-                        error("Environment import failed: errno = %d\n", errno); 
+                        pr_err("Environment import failed: errno = %d\n", errno); 
 
                         gd->flags |= GD_FLG_ENV_READY;
                         gd->flags |= GD_FLG_ENV_DEFAULT;
@@ -143,7 +143,7 @@ void set_default_env(const char *s)
 			if (himport_r(&env_htab, (char *)default_environment_ssd,
                                 sizeof(default_environment_ssd), '\0', flags, 0,
                                 0, NULL) == 0)
-                        error("Environment import failed: errno = %d\n", errno); 
+                        pr_err("Environment import failed: errno = %d\n", errno); 
 
                         gd->flags |= GD_FLG_ENV_READY;
                         gd->flags |= GD_FLG_ENV_DEFAULT;
@@ -152,7 +152,7 @@ void set_default_env(const char *s)
 			if (himport_r(&env_htab, (char *)default_environment_msd,
                                 sizeof(default_environment_msd), '\0', flags, 0,
                                 0, NULL) == 0)
-                        error("Environment import failed: errno = %d\n", errno); 
+                        pr_err("Environment import failed: errno = %d\n", errno); 
 
                         gd->flags |= GD_FLG_ENV_READY;
                         gd->flags |= GD_FLG_ENV_DEFAULT;
@@ -161,7 +161,7 @@ void set_default_env(const char *s)
 			if (himport_r(&env_htab, (char *)default_environment,
                                 sizeof(default_environment), '\0', flags, 0,
                                 0, NULL) == 0)
-                        error("Environment import failed: errno = %d\n", errno); 
+                        pr_err("Environment import failed: errno = %d\n", errno); 
 
                         gd->flags |= GD_FLG_ENV_READY;
                         gd->flags |= GD_FLG_ENV_DEFAULT;

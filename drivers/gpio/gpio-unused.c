@@ -54,7 +54,7 @@ static int iw_gpio_probe(struct udevice *dev)
 		ret = gpio_request_list_by_name(dev, "gpios", num_gpios,
 				num_ctrl, GPIOD_IS_IN);
 		if (ret < 0) {
-			error("Can't get %s gpios! Error: %d", dev->name, ret);
+			pr_err("Can't get %s gpios! Error: %d", dev->name, ret);
 			return ret;
 		}
 		free(num_gpios);            

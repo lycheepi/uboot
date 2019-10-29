@@ -18,7 +18,7 @@
 #include <netdev.h>
 #include <fsl_ifc.h>
 #include <fdt_support.h>
-#include <libfdt.h>
+#include <linux/libfdt.h>
 #include <environment.h>
 #include <fsl_esdhc.h>
 #include <i2c.h>
@@ -27,14 +27,14 @@
 #include <asm/io.h>
 #include <asm/gpio.h>
 #include <asm/arch/clock.h>
-#include <asm/imx-common/sci/sci.h>
+#include <asm/mach-imx/sci/sci.h>
 #include <asm/arch/imx8-pins.h>
 #include <dm.h>
 #include <imx8_hsio.h>
 #include <usb.h>
 #include <asm/arch/iomux.h>
 #include <asm/arch/sys_proto.h>
-#include <asm/imx-common/video.h>
+#include <asm/mach-imx/video.h>
 #include <asm/arch/video_common.h>
 #include <power-domain.h>
 
@@ -164,6 +164,8 @@ int board_mmc_init(bd_t *bis)
 {
 	int i, ret;
 	struct power_domain pd;
+
+	printf("HUYTV12: board_mmc_init ok!\n");
 
 	/*
 	 * According to the board_mmc_init() the following map is done:
@@ -517,7 +519,7 @@ void iwg27m_fdt_update(void *fdt)
         }
 
 	/* IWG27M: Select LCD/HDMI based on boot argument */
-	if (!strcmp("hdmi", getenv ("disp"))) {
+	/*if (!strcmp("hdmi", getenv ("disp"))) {
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/dsi_phy@56228300"), "status", "disabled");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/mipi_dsi@56228000"), "status", "disabled");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/mipi_dsi_bridge@56228000"), "status", "disabled");
@@ -530,7 +532,7 @@ void iwg27m_fdt_update(void *fdt)
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/mipi_dsi_bridge@56228000"), "status", "okay");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/hdmi@56268000"), "status", "disabled");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/sound-hdmi"), "status", "disabled");
-	}
+	}*/
 }
 
 int board_init(void)

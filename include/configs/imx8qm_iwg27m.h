@@ -202,7 +202,7 @@
 
 
 /* Default environment is in SD */
-#define CONFIG_ENV_SIZE			0x1000
+#define CONFIG_ENV_SIZE			0x2000
 
 #ifdef CONFIG_QSPI_BOOT
 #define CONFIG_ENV_OFFSET       (4 * 1024 * 1024)
@@ -231,6 +231,7 @@
 #endif
 
 #define CONFIG_SYS_MMC_ENV_DEV		1   /* USDHC1 */
+#define CONFIG_MMCROOT                  "/dev/mmcblk0p2"  /* USDHC1 */
 #define CONFIG_SYS_FSL_USDHC_NUM	2
 
 /* Size of malloc() pool */
@@ -244,9 +245,8 @@
 #define PHYS_SDRAM_2_SIZE		0x100000000	/* 4 GB */
 
 /*Memory test */
-#define CONFIG_CMD_MEMTEST
-#define CONFIG_SYS_MEMTEST_START       0x80020000
-#define CONFIG_SYS_MEMTEST_END         (CONFIG_SYS_MEMTEST_START+0x70000000)
+#define CONFIG_SYS_MEMTEST_START       0xA0000000
+#define CONFIG_SYS_MEMTEST_END         (CONFIG_SYS_MEMTEST_START + (PHYS_SDRAM_1_SIZE >> 2))
 
 /* Serial */
 #ifdef CONFIG_SYS_PROMPT
@@ -257,16 +257,13 @@
 #define CONFIG_BAUDRATE			115200
 
 /* Monitor Command Prompt */
-#define CONFIG_SYS_LONGHELP
 #define CONFIG_HUSH_PARSER
 #define CONFIG_SYS_PROMPT_HUSH_PS2     "> "
-#define CONFIG_AUTO_COMPLETE
 #define CONFIG_SYS_CBSIZE              1024
 #define CONFIG_SYS_MAXARGS             64
 #define CONFIG_SYS_BARGSIZE CONFIG_SYS_CBSIZE
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + \
 					sizeof(CONFIG_SYS_PROMPT) + 16)
-#define CONFIG_CMDLINE_EDITING
 
 /* Generic Timer Definitions */
 #define COUNTER_FREQUENCY		8000000	/* 8MHz */
@@ -291,9 +288,9 @@
 #define CONFIG_USB_MAX_CONTROLLER_COUNT 2
 
 /* USB 3.0 controller configs */
-#ifdef CONFIG_USB_XHCI_IMX8
+/*#ifdef CONFIG_USB_XHCI_IMX8
 #define CONFIG_SYS_USB_XHCI_MAX_ROOT_PORTS	2
-#endif
+#endif*/
 
 /* USB OTG controller configs */
 #ifdef CONFIG_USB_EHCI_HCD
@@ -305,7 +302,6 @@
 
 #ifdef CONFIG_USB_GADGET
 #define CONFIG_USBD_HS
-#define CONFIG_USB_FUNCTION_MASS_STORAGE
 #endif
 
 #if defined(CONFIG_ANDROID_SUPPORT)
