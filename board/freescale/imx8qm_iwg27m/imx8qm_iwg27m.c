@@ -519,20 +519,20 @@ void iwg27m_fdt_update(void *fdt)
         }
 
 	/* IWG27M: Select LCD/HDMI based on boot argument */
-	/*if (!strcmp("hdmi", getenv ("disp"))) {
+	if (!strcmp("hdmi", env_get("disp"))) {
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/dsi_phy@56228300"), "status", "disabled");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/mipi_dsi@56228000"), "status", "disabled");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/mipi_dsi_bridge@56228000"), "status", "disabled");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/hdmi@56268000"), "status", "okay");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/sound-hdmi"), "status", "okay");
 	}
-	else if (!strcmp("lcd", getenv ("disp"))) {
+	else if (!strcmp("lcd", env_get("disp"))) {
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/dsi_phy@56228300"), "status", "okay");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/mipi_dsi@56228000"), "status", "okay");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/mipi_dsi_bridge@56228000"), "status", "okay");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/hdmi@56268000"), "status", "disabled");
 		fdt_setprop_string(fdt, fdt_path_offset(fdt, "/sound-hdmi"), "status", "disabled");
-	}*/
+	}
 }
 
 int board_init(void)
